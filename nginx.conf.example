@@ -1,0 +1,23 @@
+# Exemple de configuration Nginx pour KJM Store Online
+# À placer dans /etc/nginx/sites-available/kjm-store.conf
+# Puis créer le lien symbolique : sudo ln -s /etc/nginx/sites-available/kjm-store.conf /etc/nginx/sites-enabled/
+# Et recharger : sudo systemctl reload nginx
+# Pour le SSL : sudo certbot --nginx -d votre-domaine.com
+
+server {
+    listen 80;
+    server_name votre-domaine.com;
+
+    client_max_body_size 500M; # Nécessaire pour les gros fichiers (produits digitaux)
+
+    location / {
+        proxy_pass http://127.0.0.1:8090;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_addrs;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
