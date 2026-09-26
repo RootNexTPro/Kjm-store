@@ -2,6 +2,8 @@
   "name": "coupons",
   "type": "base",
   "system": false,
+  "listRule": "",
+  "viewRule": "",
   "schema": [
     {
       "name": "code",

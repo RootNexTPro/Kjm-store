@@ -92,6 +92,15 @@
                         <input type="email" id="customer_email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
                     <div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Code Promo (Optionnel)</label>
+                        <div class="flex space-x-2">
+                            <input type="text" id="promo_code" class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 uppercase">
+                            <button type="button" id="apply-promo-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors">Appliquer</button>
+                        </div>
+                        <p id="promo-message" class="text-xs mt-1 hidden"></p>
+                    </div>
+
                         <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone (Mobile Money)</label>
                         <input type="tel" id="customer_phone" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
@@ -221,6 +230,11 @@
             document.getElementById('modal-product-title').textContent = title;
             document.getElementById('modal-price').textContent = price;
 
+            discountedPrice = null;
+            document.getElementById('promo_code').value = '';
+            document.getElementById('promo-message').classList.add('hidden');
+
+
             checkoutForm.classList.remove('hidden');
             successMessage.classList.add('hidden');
             modal.classList.add('active');
@@ -232,6 +246,58 @@
 
         modal.addEventListener('click', (e) => {
             if(e.target === modal) modal.classList.remove('active');
+        });
+
+
+        let discountedPrice = null;
+
+        document.getElementById('apply-promo-btn').addEventListener('click', async () => {
+            const codeInput = document.getElementById('promo_code');
+            const code = codeInput.value.trim().toUpperCase();
+            const msgEl = document.getElementById('promo-message');
+            const originalPrice = parseFloat(document.getElementById('product_price').value);
+
+            if (!code) return;
+
+            try {
+                const res = await fetch(`${POCKETBASE_URL}/api/collections/coupons/records?filter=(code='${code}' && is_active=true)`);
+                const data = await res.json();
+
+                msgEl.classList.remove('hidden');
+
+                if (data.items && data.items.length > 0) {
+                    const coupon = data.items[0];
+                    // Verify max_uses if you want, but this is a simplified check
+
+                    let discount = 0;
+                    if (coupon.discount_percent) {
+                        discount = originalPrice * (coupon.discount_percent / 100);
+                    } else if (coupon.discount_amount) {
+                        discount = coupon.discount_amount;
+                    }
+
+                    discountedPrice = Math.max(0, originalPrice - discount);
+
+                    msgEl.textContent = `Code appliqué : -${coupon.discount_percent ? coupon.discount_percent + '%' : discount + ' XAF'}`;
+                    msgEl.className = 'text-xs mt-1 text-green-600 font-medium';
+
+                    document.getElementById('modal-price').innerHTML = `
+                        <span class="line-through text-indigo-300 text-sm mr-1">${originalPrice}</span>
+                        ${discountedPrice}
+                    `;
+                } else {
+                    discountedPrice = null;
+                    msgEl.textContent = 'Code promo invalide ou expiré';
+                    msgEl.className = 'text-xs mt-1 text-red-600 font-medium';
+                    document.getElementById('modal-price').textContent = originalPrice;
+                }
+            } catch (err) {
+                console.error(err);
+                discountedPrice = null;
+                msgEl.textContent = 'Erreur de vérification';
+                msgEl.className = 'text-xs mt-1 text-red-600 font-medium';
+                document.getElementById('modal-price').textContent = originalPrice;
+            }
         });
 
         // Checkout logic
@@ -246,7 +312,8 @@
             const email = document.getElementById('customer_email').value;
             const phone = document.getElementById('customer_phone').value;
             const productTitle = document.getElementById('product_name_hidden').value;
-            const amount = parseFloat(document.getElementById('product_price').value);
+            const originalAmount = parseFloat(document.getElementById('product_price').value);
+            const amount = discountedPrice !== null ? discountedPrice : originalAmount;
 
             // Generate CMD-XXXXXX reference
             const reference = 'CMD-' + Math.floor(100000 + Math.random() * 900000);
