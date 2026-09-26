@@ -1,0 +1,96 @@
+{
+  "name": "products",
+  "type": "base",
+  "system": false,
+  "schema": [
+    {
+      "name": "title",
+      "type": "text",
+      "system": false,
+      "required": true,
+      "options": {
+        "min": null,
+        "max": null,
+        "pattern": ""
+      }
+    },
+    {
+      "name": "slug",
+      "type": "text",
+      "system": false,
+      "required": true,
+      "options": {
+        "min": null,
+        "max": null,
+        "pattern": ""
+      }
+    },
+    {
+      "name": "price",
+      "type": "number",
+      "system": false,
+      "required": true,
+      "options": {
+        "min": null,
+        "max": null
+      }
+    },
+    {
+      "name": "original_price",
+      "type": "number",
+      "system": false,
+      "required": false,
+      "options": {
+        "min": null,
+        "max": null
+      }
+    },
+    {
+      "name": "description",
+      "type": "editor",
+      "system": false,
+      "required": false,
+      "options": {}
+    },
+    {
+      "name": "cover",
+      "type": "file",
+      "system": false,
+      "required": false,
+      "options": {
+        "maxSelect": 1,
+        "maxSize": 5242880,
+        "mimeTypes": ["image/jpeg", "image/png", "image/svg+xml", "image/gif", "image/webp"]
+      }
+    },
+    {
+      "name": "file",
+      "type": "file",
+      "system": false,
+      "required": true,
+      "options": {
+        "maxSelect": 1,
+        "maxSize": 524288000,
+        "mimeTypes": []
+      }
+    },
+    {
+      "name": "category",
+      "type": "text",
+      "system": false,
+      "required": false,
+      "options": {
+        "min": null,
+        "max": null,
+        "pattern": ""
+      }
+    },
+    {
+      "name": "is_active",
+      "type": "bool",
+      "system": false,
+      "required": false,
+      "options": {}
+    }
+  ]
+}

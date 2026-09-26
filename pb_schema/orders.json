@@ -1,0 +1,81 @@
+{
+  "name": "orders",
+  "type": "base",
+  "system": false,
+  "schema": [
+    {
+      "name": "customer_name",
+      "type": "text",
+      "system": false,
+      "required": true,
+      "options": {
+        "min": null,
+        "max": null,
+        "pattern": ""
+      }
+    },
+    {
+      "name": "customer_email",
+      "type": "email",
+      "system": false,
+      "required": true,
+      "options": {
+        "exceptDomains": [],
+        "onlyDomains": []
+      }
+    },
+    {
+      "name": "customer_phone",
+      "type": "text",
+      "system": false,
+      "required": false,
+      "options": {
+        "min": null,
+        "max": null,
+        "pattern": ""
+      }
+    },
+    {
+      "name": "product_title",
+      "type": "text",
+      "system": false,
+      "required": true,
+      "options": {
+        "min": null,
+        "max": null,
+        "pattern": ""
+      }
+    },
+    {
+      "name": "amount",
+      "type": "number",
+      "system": false,
+      "required": true,
+      "options": {
+        "min": null,
+        "max": null
+      }
+    },
+    {
+      "name": "status",
+      "type": "select",
+      "system": false,
+      "required": true,
+      "options": {
+        "maxSelect": 1,
+        "values": ["pending", "paid", "failed"]
+      }
+    },
+    {
+      "name": "reference",
+      "type": "text",
+      "system": false,
+      "required": true,
+      "options": {
+        "min": null,
+        "max": null,
+        "pattern": ""
+      }
+    }
+  ]
+}

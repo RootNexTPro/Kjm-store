@@ -1,0 +1,55 @@
+{
+  "name": "coupons",
+  "type": "base",
+  "system": false,
+  "schema": [
+    {
+      "name": "code",
+      "type": "text",
+      "system": false,
+      "required": true,
+      "options": {
+        "min": null,
+        "max": null,
+        "pattern": ""
+      }
+    },
+    {
+      "name": "discount_percent",
+      "type": "number",
+      "system": false,
+      "required": false,
+      "options": {
+        "min": null,
+        "max": null
+      }
+    },
+    {
+      "name": "discount_amount",
+      "type": "number",
+      "system": false,
+      "required": false,
+      "options": {
+        "min": null,
+        "max": null
+      }
+    },
+    {
+      "name": "is_active",
+      "type": "bool",
+      "system": false,
+      "required": false,
+      "options": {}
+    },
+    {
+      "name": "max_uses",
+      "type": "number",
+      "system": false,
+      "required": false,
+      "options": {
+        "min": null,
+        "max": null
+      }
+    }
+  ]
+}
