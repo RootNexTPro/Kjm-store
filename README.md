@@ -38,3 +38,13 @@ Before deploying the application, ensure the following prerequisites are met:
 2. Proper environment variable configuration for production, including valid Notch Pay keys.
 3. Persistent storage setup for the `pb_data/` directory to prevent data loss.
 4. A domain name with SSL/TLS certificates configured (PocketBase can handle automatic TLS if bound to port 80/443).
+
+## Configuration du Webhook Notch Pay
+
+Pour que les paiements soient automatiquement confirmés dans votre boutique (statut mis à jour de `pending` à `paid`), vous devez configurer le webhook Notch Pay.
+
+1. Connectez-vous à votre [Tableau de bord Notch Pay Business suite](https://business.notchpay.co).
+2. Naviguez vers la section des **Paramètres** puis **Webhooks**.
+3. Ajoutez une nouvelle URL de webhook pointant vers votre serveur déployé :
+   `https://votre-domaine.com/api/webhooks/notchpay`
+4. Assurez-vous d'avoir configuré la variable `NOTCHPAY_PRIVATE_KEY` dans votre environnement de production (ou `.env` localement) afin que le serveur puisse vérifier l'authenticité de la transaction.
