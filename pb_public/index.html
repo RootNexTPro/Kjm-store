@@ -5,201 +5,538 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KJM Store Online</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .modal { display: none; }
         .modal.active { display: flex; }
+        @keyframes shine { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+        .btn-shine { position: relative; overflow: hidden; }
+        .btn-shine::after { content: ''; position: absolute; top: 0; left: 0; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg); animation: shine 2.5s infinite; }
+        .prose img { border-radius: 1rem; margin: 1rem auto; max-width: 100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .prose a { color: #4f46e5; text-decoration: underline; font-weight: 600; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
-
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <span class="text-2xl font-bold text-indigo-600">KJM Store Online</span>
-                <a href="purchases.html" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors ml-6">Mes Achats 📦</a>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    Paiement Sécurisé
-                </div>
-                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2">
-                    <option value="XAF">XAF</option>
-                </select>
-            </div>
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+    <!-- Header Moderne avec Menu 3 traits (☰) -->
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black text-indigo-600 flex items-center gap-2">
+                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+                <span>KJM Store</span>
+            </a>
+            <button id="menu-btn" onclick="toggleMenu()" class="p-2.5 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
         </div>
     </header>
 
-    <!-- Hero Banner -->
-    <section class="bg-indigo-600 text-white py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Bienvenue sur KJM Store Online</h1>
-            <p class="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">Votre boutique de produits digitaux premium. Accédez instantanément à nos abonnements, formations, et logiciels.</p>
-            <div class="inline-flex items-center space-x-2 bg-indigo-500 bg-opacity-50 px-4 py-2 rounded-full text-sm font-medium">
-                <svg class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                <span>Livraison 24h/24 & 7j/7 automatique</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Category Filters -->
-    <section class="py-8 bg-white border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap justify-center gap-3">
-                <button class="filter-btn active bg-indigo-600 text-white px-5 py-2 rounded-full text-sm font-medium transition-colors" data-category="Tous">Tous</button>
-                <button class="filter-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-5 py-2 rounded-full text-sm font-medium transition-colors" data-category="Abonnements IA">Abonnements IA</button>
-                <button class="filter-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-5 py-2 rounded-full text-sm font-medium transition-colors" data-category="Formations & E-books">Formations & E-books</button>
-                <button class="filter-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-5 py-2 rounded-full text-sm font-medium transition-colors" data-category="Logiciels & Licences">Logiciels & Licences</button>
-                <button class="filter-btn bg-gray-100 text-gray-700 hover:bg-gray-200 px-5 py-2 rounded-full text-sm font-medium transition-colors" data-category="Packs & Bundles">Packs & Bundles</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Product Grid -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <!-- Products will be injected here -->
-            <div class="col-span-full text-center py-10 text-gray-500" id="loading-indicator">
-                Chargement des produits...
-            </div>
-        </div>
-    </main>
-
-    <!-- Express Checkout Modal -->
-    <div id="checkout-modal" class="modal fixed inset-0 z-[100] bg-black bg-opacity-50 items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden relative">
-            <div class="p-6">
-                <button type="button" id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Paiement Express</h3>
-                <p class="text-sm text-gray-500 mb-6" id="modal-product-title">Produit sélectionné</p>
-
-                <form id="checkout-form" class="space-y-4">
-                    <input type="hidden" id="product_id">
-                    <input type="hidden" id="product_price">
-                    <input type="hidden" id="product_name_hidden">
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
-                        <input type="text" id="customer_name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email (pour la livraison)</label>
-                        <input type="email" id="customer_email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Code Promo (Optionnel)</label>
-                        <div class="flex space-x-2">
-                            <input type="text" id="promo_code" class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 uppercase">
-                            <button type="button" id="apply-promo-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors">Appliquer</button>
-                        </div>
-                        <p id="promo-message" class="text-xs mt-1 hidden"></p>
-                    </div>
-
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone (Mobile Money)</label>
-                        <input type="tel" id="customer_phone" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-
-                    <button type="submit" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-colors mt-6">
-                        Confirmer la commande - <span id="modal-price">0</span> XAF
+    <!-- Tiroir latéral (Drawer Menu Mobile 3 traits) -->
+    <div id="mobile-menu-drawer" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity" onclick="toggleMenu()">
+        <div class="fixed top-0 right-0 bottom-0 w-72 max-w-[85vw] bg-white shadow-2xl p-6 flex flex-col justify-between" onclick="event.stopPropagation()">
+            <div>
+                <div class="flex justify-between items-center pb-5 border-b border-gray-100 mb-6">
+                    <span class="text-base font-black text-gray-900 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                        </svg>
+                        <span>Menu KJM Store</span>
+                    </span>
+                    <button onclick="toggleMenu()" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
                     </button>
-                </form>
-
-                <div id="success-message" class="hidden flex-col items-center justify-center py-6 text-center">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                    </div>
-                    <p class="text-lg font-semibold text-gray-900">Commande enregistrée !</p>
-                    <p class="text-sm text-gray-500 mt-2">Redirection vers le paiement sécurisé...</p>
+                </div>
+                <nav class="space-y-2">
+                    <a href="index.html" onclick="toggleMenu(); closeProductDetail();" class="flex items-center gap-3 p-3 rounded-2xl hover:bg-indigo-50 text-gray-800 hover:text-indigo-600 font-bold text-sm transition-colors">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                        <span>Nos Produits</span>
+                    </a>
+                    <a href="purchases.html" class="flex items-center gap-3 p-3 rounded-2xl hover:bg-indigo-50 text-gray-800 hover:text-indigo-600 font-bold text-sm transition-colors">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                        <span>Mes Achats</span>
+                    </a>
+                    <a href="https://wa.me/237699000000" target="_blank" class="flex items-center gap-3 p-3 rounded-2xl hover:bg-green-50 text-gray-800 hover:text-green-700 font-bold text-sm transition-colors">
+                        <svg class="w-5 h-5 fill-[#25D366]" viewBox="0 0 24 24">
+                            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.97.545 1.764.819 2.796.82h.005c3.182 0 5.767-2.587 5.768-5.766.001-3.182-2.585-5.77-5.773-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.072-2.029-.481-1.616-.669-2.656-2.316-2.737-2.424-.08-.108-.65-.65-.65-1.647 0-.997.521-1.488.706-1.693.185-.205.405-.257.54-.257.135 0 .27.001.387.007.123.007.288-.047.45.342.162.387.558 1.36.608 1.46.05.101.083.218.016.35-.067.133-.101.216-.201.332-.1.116-.21.26-.3.35-.1.1-.205.21-.088.411.117.201.52.858 1.113 1.11.766.68 1.411.89 1.612.99.201.1.319.083.436-.05.118-.134.505-.589.64-.79.135-.202.27-.168.455-.101.185.067 1.178.556 1.38.657.202.101.337.151.387.236.05.084.05.49-.094.895z"/>
+                        </svg>
+                        <span>Support WhatsApp</span>
+                    </a>
+                </nav>
+            </div>
+            <div class="pt-6 border-t border-gray-100">
+                <div class="bg-gray-50 rounded-2xl p-3.5 flex items-center gap-2.5 text-xs font-bold text-emerald-800 border border-emerald-100">
+                    <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                    <span>Paiements Chiffrés & Sécurisés</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        const POCKETBASE_URL = window.location.origin; // Assuming PocketBase serves this directly
-        const NOTCHPAY_PUBLIC_KEY = 'pk_test_placeholder_key'; // Replace with actual public key if needed or inject via template
+    <!-- CATALOGUE -->
+    <div id="view-catalog" class="flex-1 pb-16">
+        <!-- BANNIÈRE DÉFILANTE AUTOMATIQUE (IMAGES UNIQUEMENT) -->
+        <section class="relative w-full overflow-hidden bg-gray-950 aspect-[16/7] sm:aspect-[21/9] md:max-h-72 flex items-center shadow-inner group">
+            <div id="hero-slider-track" class="w-full h-full relative">
+                <!-- Les images sélectionnées dans PocketBase défilent ici à 100% de la largeur et hauteur -->
+            </div>
+            
+            <button id="hero-prev" onclick="prevHeroBanner()" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm z-20 transition-all opacity-0 group-hover:opacity-100">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button id="hero-next" onclick="nextHeroBanner()" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center backdrop-blur-sm z-20 transition-all opacity-0 group-hover:opacity-100">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            </button>
+            <div id="hero-dots" class="absolute bottom-2.5 left-0 right-0 flex justify-center gap-1.5 z-20"></div>
+        </section>
 
+        <!-- FILTRES DE CATÉGORIES AVEC ICÔNES VECTORIELLES PROFESSIONNELLES (PAS D'EMOJI CLAVIER) -->
+        <section class="sticky top-[53px] z-30 bg-white/95 backdrop-blur border-b border-gray-200 py-2.5 px-4">
+            <div class="max-w-7xl mx-auto flex gap-2 overflow-x-auto no-scrollbar">
+                <button class="filter-btn active bg-indigo-600 text-white px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all" data-category="Tous">
+                    <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                    <span>Tous</span>
+                </button>
+                <button class="filter-btn bg-gray-100 text-gray-700 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all" data-category="Abonnements IA">
+                    <svg class="w-3.5 h-3.5 text-purple-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z"/></svg>
+                    <span>Abonnements IA</span>
+                </button>
+                <button class="filter-btn bg-gray-100 text-gray-700 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all" data-category="Formations & E-books">
+                    <svg class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    <span>Formations & E-books</span>
+                </button>
+                <button class="filter-btn bg-gray-100 text-gray-700 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all" data-category="Logiciels & Licences">
+                    <svg class="w-3.5 h-3.5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <span>Logiciels & Licences</span>
+                </button>
+                <button class="filter-btn bg-gray-100 text-gray-700 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all" data-category="Packs & Bundles">
+                    <svg class="w-3.5 h-3.5 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    <span>Packs & Bundles</span>
+                </button>
+            </div>
+        </section>
+
+        <main class="max-w-7xl mx-auto px-4 py-8">
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div class="col-span-full text-center py-16 text-gray-400 font-bold">Chargement...</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- FICHE PRODUIT AVEC CARROUSEL D'IMAGES -->
+    <div id="view-product-detail" class="hidden flex-1 bg-white pb-28">
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <button onclick="closeProductDetail()" class="text-sm font-bold text-gray-600 hover:text-indigo-600 mb-6 flex items-center gap-1.5 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span>Retour au catalogue</span>
+            </button>
+
+            <!-- CARROUSEL D'IMAGES TACTILE -->
+            <div class="relative w-full rounded-3xl overflow-hidden bg-gray-100 shadow-md mb-6 group">
+                <div id="slider-touch-area" class="relative aspect-video w-full overflow-hidden bg-gray-900 select-none">
+                    <img id="detail-cover" src="" class="w-full h-full object-cover transition-opacity duration-300">
+                    <div id="detail-badge-left" class="absolute top-4 left-4 px-3.5 py-1.5 rounded-full text-xs font-black shadow-lg hidden z-10"></div>
+                    <div id="detail-badge-right" class="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-lg hidden z-10"></div>
+                    
+                    <button id="slider-prev" onclick="prevSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 shadow-lg backdrop-blur-md flex items-center justify-center transition-all z-10 hidden">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button id="slider-next" onclick="nextSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-gray-800 shadow-lg backdrop-blur-md flex items-center justify-center transition-all z-10 hidden">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <div id="slider-dots" class="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10 hidden"></div>
+                </div>
+                <div id="slider-thumbs" class="flex gap-2 p-3 bg-white border-t border-gray-100 overflow-x-auto no-scrollbar hidden"></div>
+            </div>
+
+            <div class="border-b border-gray-100 pb-5 mb-6">
+                <h1 id="detail-title" class="text-2xl sm:text-4xl font-black text-gray-900 mb-3 leading-tight">...</h1>
+                <div class="flex items-center gap-3 flex-wrap">
+                    <span id="detail-price" class="text-3xl font-black text-indigo-600">...</span>
+                    <span id="detail-original-price" class="text-base text-gray-400 line-through"></span>
+                    <span id="detail-category-badge" class="text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full inline-flex items-center gap-1.5"></span>
+                </div>
+            </div>
+            <div class="mb-10">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Description & Contenu</h3>
+                <div id="detail-description" class="prose max-w-none text-gray-700 space-y-3 leading-relaxed"></div>
+            </div>
+            <div id="detail-faq-section" class="border-t border-gray-100 pt-8 mb-10 hidden">
+                <h3 class="text-xl font-black text-gray-900 mb-5 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span>Questions Fréquentes</span>
+                </h3>
+                <div id="detail-faq-list" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <!-- BARRE FIXE EN BAS (STICKY BUY BAR) -->
+        <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-3 z-40 shadow-2xl">
+            <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
+                <div>
+                    <span id="sticky-price" class="text-xl font-black text-indigo-600 block">...</span>
+                    <span class="text-[10px] text-gray-400 font-bold uppercase">Livraison 24/7</span>
+                </div>
+                <button id="sticky-buy-btn" onclick="buyCurrentProduct()" class="flex-1 sm:flex-initial sm:min-w-[240px] text-white font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-lg transition-transform active:scale-95 text-center flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    <span id="sticky-btn-text">Acheter maintenant</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PAIEMENT EXPRESS -->
+    <div id="checkout-modal" class="modal fixed inset-0 z-50 bg-black/60 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6 relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 bg-gray-100 p-1.5 rounded-full">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <h3 class="text-lg font-extrabold text-gray-900">Paiement Express</h3>
+            <p class="text-xs text-indigo-600 font-bold mb-4" id="modal-product-title">Produit</p>
+            <form id="checkout-form" class="space-y-3">
+                <input type="hidden" id="product_id">
+                <input type="hidden" id="product_price">
+                <input type="hidden" id="product_name_hidden">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Nom complet</label>
+                    <input type="text" id="customer_name" required placeholder="Votre nom" class="w-full px-3.5 py-2 border rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Email (pour la livraison)</label>
+                    <input type="email" id="customer_email" required placeholder="votre@email.com" class="w-full px-3.5 py-2 border rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Téléphone (Mobile Money)</label>
+                    <input type="tel" id="customer_phone" required placeholder="6XXXXXXXX" class="w-full px-3.5 py-2 border rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Code Promo (Optionnel)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="promo_code" placeholder="CODE" class="flex-grow px-3 py-1.5 border rounded-xl uppercase text-xs font-bold">
+                        <button type="button" id="apply-promo-btn" class="bg-gray-900 text-white text-xs font-bold px-3 py-1.5 rounded-xl">Appliquer</button>
+                    </div>
+                    <p id="promo-message" class="text-xs font-bold mt-1 hidden"></p>
+                </div>
+                <button type="submit" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold py-3 px-4 rounded-xl shadow-lg text-sm mt-4 flex items-center justify-center gap-2">
+                    <span>Confirmer - <span id="modal-price">0</span> XAF</span>
+                </button>
+            </form>
+            <div id="success-message" class="hidden text-center py-6">
+                <div class="w-14 h-14 bg-green-50 border-2 border-green-200 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <p class="font-bold text-gray-900 text-sm">Commande validée !</p>
+                <p class="text-xs text-gray-400 mt-1">Génération de votre accès...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const POCKETBASE_URL = window.location.origin;
         let currentCategory = 'Tous';
         let allProducts = [];
+        let activeProduct = null;
+        let appliedCoupon = null;
+        let discountedPrice = null;
+        let currentSlideIndex = 0;
+        let currentSlideImages = [];
 
-        // DOM Elements
+        // Gestion du Carrousel de Bannière Hero
+        let heroBanners = [];
+        let currentHeroIndex = 0;
+        let heroTimer = null;
+
+        const catalogView = document.getElementById('view-catalog');
+        const detailView = document.getElementById('view-product-detail');
         const grid = document.getElementById('product-grid');
-        const loader = document.getElementById('loading-indicator');
-        const filterBtns = document.querySelectorAll('.filter-btn');
         const modal = document.getElementById('checkout-modal');
         const closeModal = document.getElementById('close-modal');
         const checkoutForm = document.getElementById('checkout-form');
         const successMessage = document.getElementById('success-message');
 
-        // Fetch products
-        async function fetchProducts() {
+        function toggleMenu() {
+            const drawer = document.getElementById('mobile-menu-drawer');
+            if (drawer) drawer.classList.toggle('hidden');
+        }
+
+        // ICÔNES SVG VECTORIELLES PROFESSIONNELLES POUR LES CATÉGORIES (ZÉRO EMOJI CLAVIER)
+        function getCategorySvg(cat, size = 'w-3 h-3') {
+            if (!cat) return '';
+            const c = cat.toLowerCase().trim();
+            if (c.includes('ia') || c.includes('ai') || c.includes('intelligence')) {
+                return `<svg class="${size} text-purple-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z"/></svg>`;
+            }
+            if (c.includes('formation') || c.includes('book') || c.includes('cours')) {
+                return `<svg class="${size} text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>`;
+            }
+            if (c.includes('logiciel') || c.includes('licence') || c.includes('soft') || c.includes('app')) {
+                return `<svg class="${size} text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`;
+            }
+            if (c.includes('pack') || c.includes('bundle')) {
+                return `<svg class="${size} text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`;
+            }
+            return `<svg class="${size} text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>`;
+        }
+
+        // Bannières défilantes depuis PocketBase (UNIQUEMENT LES IMAGES, AUCUN TEXTE QUI BLOQUE)
+        async function fetchHeroBanners() {
             try {
-                // In a real scenario, use actual PocketBase API:
-                const res = await fetch(`${POCKETBASE_URL}/api/collections/products/records?filter=(is_active=true)`);
+                const res = await fetch(`${POCKETBASE_URL}/api/collections/banners/records?filter=is_active!=false&sort=sort_order,-created`);
                 if (res.ok) {
                     const data = await res.json();
-                    allProducts = data.items;
-                } else {
-                    console.error('Failed to fetch from real API, falling back to empty list.');
+                    if (data.items && data.items.length > 0) {
+                        heroBanners = data.items;
+                    }
                 }
-                renderProducts();
-            } catch (error) {
-                console.error('Error fetching products:', error);
-                loader.innerHTML = 'Erreur lors du chargement des produits.';
+            } catch (e) {}
+
+            if (heroBanners.length === 0) {
+                // Si aucune bannière uploadée, visuels de secours
+                heroBanners = [
+                    { image: '', bg: 'from-indigo-900 via-purple-900 to-indigo-950' },
+                    { image: '', bg: 'from-blue-950 via-indigo-900 to-slate-950' }
+                ];
+            }
+            renderHeroBanners();
+        }
+
+        function renderHeroBanners() {
+            const track = document.getElementById('hero-slider-track');
+            const dots = document.getElementById('hero-dots');
+            if (!track || !dots) return;
+
+            track.innerHTML = '';
+            dots.innerHTML = '';
+
+            heroBanners.forEach((b, idx) => {
+                const slide = document.createElement('div');
+                slide.id = `hero-slide-${idx}`;
+                slide.className = `hero-slide absolute inset-0 transition-opacity duration-700 ${idx === currentHeroIndex ? 'opacity-100 pointer-events-auto z-10' : 'opacity-0 pointer-events-none z-0'}`;
+
+                // Image pure sans texte superposé au milieu
+                let imgHtml = '';
+                if (b.image && typeof b.image === 'string' && b.image.trim()) {
+                    const imgUrl = `${POCKETBASE_URL}/api/files/banners/${b.id}/${b.image}`;
+                    imgHtml = `<img src="${imgUrl}" alt="Bannière" class="w-full h-full object-cover select-none" onerror="this.parentElement.style.display='none'">`;
+                } else {
+                    const grad = b.bg || 'from-indigo-950 via-indigo-900 to-purple-950';
+                    imgHtml = `<div class="w-full h-full bg-gradient-to-r ${grad} flex items-center justify-center text-white/40 font-bold text-xs">KJM Store</div>`;
+                }
+
+                if (b.link && b.link.trim()) {
+                    slide.style.cursor = 'pointer';
+                    slide.onclick = () => { window.location.href = b.link.trim(); };
+                }
+
+                slide.innerHTML = imgHtml;
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.id = `hero-dot-${idx}`;
+                dot.className = `h-1.5 rounded-full transition-all ${idx === currentHeroIndex ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/40'}`;
+                dot.onclick = () => setHeroBanner(idx);
+                dots.appendChild(dot);
+            });
+
+            startHeroAutoSlide();
+        }
+
+        function updateHeroDisplay() {
+            heroBanners.forEach((_, idx) => {
+                const s = document.getElementById(`hero-slide-${idx}`);
+                const d = document.getElementById(`hero-dot-${idx}`);
+                if (s) {
+                    s.className = `hero-slide absolute inset-0 transition-opacity duration-700 ${idx === currentHeroIndex ? 'opacity-100 pointer-events-auto z-10' : 'opacity-0 pointer-events-none z-0'}`;
+                }
+                if (d) {
+                    d.className = (idx === currentHeroIndex) ? 'w-5 h-1.5 bg-white rounded-full transition-all' : 'w-1.5 h-1.5 bg-white/40 rounded-full transition-all';
+                }
+            });
+        }
+
+        function nextHeroBanner() {
+            if (heroBanners.length <= 1) return;
+            currentHeroIndex = (currentHeroIndex + 1) % heroBanners.length;
+            updateHeroDisplay();
+        }
+
+        function prevHeroBanner() {
+            if (heroBanners.length <= 1) return;
+            currentHeroIndex = (currentHeroIndex - 1 + heroBanners.length) % heroBanners.length;
+            updateHeroDisplay();
+        }
+
+        function setHeroBanner(i) {
+            currentHeroIndex = i;
+            updateHeroDisplay();
+            startHeroAutoSlide();
+        }
+
+        function startHeroAutoSlide() {
+            if (heroTimer) clearInterval(heroTimer);
+            heroTimer = setInterval(nextHeroBanner, 4500);
+        }
+
+        // Swipe tactile sur la bannière
+        let heroTouchStartX = 0;
+        let heroTouchEndX = 0;
+        const heroTrack = document.getElementById('hero-slider-track');
+        if (heroTrack) {
+            heroTrack.addEventListener('touchstart', e => { heroTouchStartX = e.changedTouches[0].screenX; }, { passive: true });
+            heroTrack.addEventListener('touchend', e => {
+                heroTouchEndX = e.changedTouches[0].screenX;
+                if (heroTouchStartX - heroTouchEndX > 40) nextHeroBanner();
+                else if (heroTouchEndX - heroTouchStartX > 40) prevHeroBanner();
+            }, { passive: true });
+        }
+
+        async function fetchProducts() {
+            try {
+                const res = await fetch(`${POCKETBASE_URL}/api/collections/products/records?perPage=100&sort=-created`);
+                if (res.ok) {
+                    const data = await res.json();
+                    allProducts = (data.items || []).filter(p => p.is_active !== false);
+                } else { allProducts = []; }
+                renderCatalog();
+
+                const urlParam = new URLSearchParams(window.location.search).get('p');
+                if (urlParam) {
+                    const found = allProducts.find(p => p.slug === urlParam || p.id === urlParam);
+                    if (found) openProductDetail(found.id, false);
+                }
+            } catch (e) {
+                if (grid) grid.innerHTML = '<div class="col-span-full text-center py-10 text-red-500 font-bold">Erreur de chargement.</div>';
             }
         }
 
-        function renderProducts() {
+        function getBadgeClass(color) {
+            const map = {
+                'Rouge': 'bg-red-500 text-white',
+                'Vert': 'bg-emerald-500 text-white',
+                'Bleu': 'bg-blue-600 text-white',
+                'Violet': 'bg-purple-600 text-white',
+                'Doré': 'bg-amber-400 text-black font-extrabold',
+                'Noir': 'bg-gray-900 text-white'
+            };
+            return map[color] || 'bg-indigo-600 text-white';
+        }
+
+        function getButtonColor(color) {
+            const map = {
+                'Vert': 'bg-green-600 hover:bg-green-700 text-white',
+                'Bleu': 'bg-blue-600 hover:bg-blue-700 text-white',
+                'Indigo': 'bg-indigo-600 hover:bg-indigo-700 text-white',
+                'Noir': 'bg-gray-900 hover:bg-black text-white',
+                'Rouge': 'bg-red-600 hover:bg-red-700 text-white',
+                'Violet': 'bg-purple-600 hover:bg-purple-700 text-white',
+                'Doré': 'bg-amber-500 hover:bg-amber-600 text-black font-black'
+            };
+            return map[color] || 'bg-indigo-600 hover:bg-indigo-700 text-white';
+        }
+
+        function getAnimationClass(anim) {
+            if (anim === 'Pulsation') return 'animate-pulse';
+            if (anim === 'Brillance') return 'btn-shine';
+            return '';
+        }
+
+        // Typographie adaptative pour que le nom remplisse parfaitement son cadre
+        function getTitleSizeClass(title) {
+            const len = (title || '').length;
+            if (len <= 20) return 'text-lg font-black leading-snug';
+            if (len <= 35) return 'text-base font-black leading-snug';
+            return 'text-xs sm:text-sm font-extrabold leading-snug';
+        }
+
+        function renderCatalog() {
+            if (!grid) return;
             grid.innerHTML = '';
             const filtered = currentCategory === 'Tous'
                 ? allProducts
-                : allProducts.filter(p => p.category === currentCategory);
+                : allProducts.filter(p => p.category && p.category.toLowerCase().trim() === currentCategory.toLowerCase().trim());
 
             if (filtered.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">Aucun produit trouvé dans cette catégorie.</div>';
+                grid.innerHTML = '<div class="col-span-full text-center py-16 text-gray-400 font-bold">Aucun produit dans cette catégorie.</div>';
                 return;
             }
 
-            filtered.forEach(product => {
-                const coverUrl = product.cover
-                    ? `${POCKETBASE_URL}/api/files/${product.collectionId}/${product.id}/${product.cover}`
-                    : 'https://via.placeholder.com/640x360?text=KJM+Store';
+            filtered.forEach(p => {
+                const coverUrl = p.cover ? `${POCKETBASE_URL}/api/files/${p.collectionId}/${p.id}/${p.cover}` : 'https://via.placeholder.com/640x360?text=KJM+Store';
+                
+                let badgeLabelHtml = '';
+                if (p.badge_label && p.badge_label.trim()) {
+                    const badgeColor = getBadgeClass(p.badge_color);
+                    badgeLabelHtml = `<div class="absolute top-3 left-3 ${badgeColor} text-[10px] font-black px-2.5 py-1 rounded-full shadow-md uppercase tracking-wider">${p.badge_label}</div>`;
+                }
 
-                const originalPriceHtml = product.original_price > product.price
-                    ? `<span class="text-sm text-gray-400 line-through mr-2">${product.original_price} XAF</span>`
-                    : '';
+                let discountBadgeHtml = '';
+                if (Number(p.original_price) > Number(p.price)) {
+                    const discount = Math.round(((Number(p.original_price) - Number(p.price)) / Number(p.original_price)) * 100);
+                    discountBadgeHtml = `<div class="absolute top-3 right-3 bg-red-600 text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow-md">-${discount}%</div>`;
+                }
 
-                const promoBadge = product.original_price > product.price
-                    ? `<div class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">PROMO</div>`
-                    : '';
+                const origHtml = Number(p.original_price) > Number(p.price) ? `<span class="text-xs text-gray-400 line-through">${p.original_price} XAF</span>` : '';
+                
+                // Catégorie sur la même ligne que le prix, avec icône SVG et taille ultra-compacte
+                let catBadgeHtml = '';
+                if (p.category && p.category.trim()) {
+                    const catText = p.category.trim();
+                    const fontClass = catText.length > 14 ? 'text-[8.5px]' : 'text-[9.5px]';
+                    catBadgeHtml = `
+                        <span onclick="event.stopPropagation(); setCategoryFilter('${catText.replace(/'/g, "\\'")}')" 
+                              class="${fontClass} font-bold text-gray-500 bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 px-1.5 py-0.5 rounded-md inline-flex items-center gap-1 flex-shrink-0 cursor-pointer whitespace-nowrap transition-colors border border-gray-200/50">
+                            ${getCategorySvg(catText, 'w-2.5 h-2.5')}
+                            <span>${catText}</span>
+                        </span>
+                    `;
+                }
+
+                const titleStyle = getTitleSizeClass(p.title);
+                const btnText = p.buy_button_text || 'Acheter maintenant';
+                const btnColor = getButtonColor(p.buy_button_color);
+                const animClass = getAnimationClass(p.button_animation);
 
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group flex flex-col';
+                card.className = 'bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all flex flex-col group';
                 card.innerHTML = `
-                    <div class="relative aspect-video w-full bg-gray-100 overflow-hidden">
-                        <img src="${coverUrl}" alt="${product.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        ${promoBadge}
+                    <div class="relative aspect-video w-full bg-gray-100 overflow-hidden cursor-pointer" onclick="openProductDetail('${p.id}')">
+                        <img src="${coverUrl}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        ${badgeLabelHtml}
+                        ${discountBadgeHtml}
                     </div>
-                    <div class="p-5 flex-1 flex flex-col">
-                        <div class="flex items-center mb-2">
-                            <span class="text-yellow-400 text-sm">⭐⭐⭐⭐⭐</span>
-                            <span class="text-gray-500 text-xs ml-1 font-medium">5.0</span>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div class="cursor-pointer" onclick="openProductDetail('${p.id}')">
+                            <h3 class="${titleStyle} text-gray-900 line-clamp-2 min-h-[2.8rem] flex items-center group-hover:text-indigo-600 transition-colors">${p.title}</h3>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-1 flex-1 leading-tight">${product.title}</h3>
-                        <div class="mt-4 flex items-center justify-between">
-                            <div>
-                                ${originalPriceHtml}
-                                <span class="text-xl font-extrabold text-indigo-600">${product.price} XAF</span>
+                        <div class="mt-2.5 flex items-baseline justify-between gap-1 overflow-hidden">
+                            <div class="flex items-baseline gap-1.5 flex-shrink-0">
+                                ${origHtml}
+                                <span class="text-base sm:text-lg font-black text-indigo-600">${p.price} XAF</span>
                             </div>
+                            ${catBadgeHtml}
                         </div>
-                        <button onclick="openCheckout('${product.id}', '${product.title.replace(/'/g, "\\'")}', ${product.price})" class="w-full mt-4 bg-gray-900 hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                            Acheter maintenant
+                        <button onclick="event.stopPropagation(); openCheckout('${p.id}', '${p.title.replace(/'/g, "\\'")}', ${p.price})" class="w-full mt-3.5 py-3 px-4 rounded-xl text-xs sm:text-sm font-black shadow-md transition-all flex items-center justify-center gap-2 ${btnColor} ${animClass}">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                            <span>${btnText}</span>
                         </button>
                     </div>
                 `;
@@ -207,190 +544,350 @@
             });
         }
 
-        // Filtering
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                filterBtns.forEach(b => {
-                    b.classList.remove('bg-indigo-600', 'text-white');
-                    b.classList.add('bg-gray-100', 'text-gray-700');
-                });
-                e.target.classList.remove('bg-gray-100', 'text-gray-700');
-                e.target.classList.add('bg-indigo-600', 'text-white');
-                currentCategory = e.target.dataset.category;
-                renderProducts();
+        window.setCategoryFilter = function(categoryName) {
+            currentCategory = categoryName || 'Tous';
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const btnCat = btn.dataset.category || 'Tous';
+                if (btnCat.toLowerCase().trim() === currentCategory.toLowerCase().trim()) {
+                    btn.className = 'filter-btn active bg-indigo-600 text-white px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all';
+                } else {
+                    btn.className = 'filter-btn bg-gray-100 text-gray-700 px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all';
+                }
             });
-        });
+            if (detailView && !detailView.classList.contains('hidden')) {
+                closeProductDetail(true);
+            }
+            renderCatalog();
+        };
 
-        // Modal interactions
-        window.openCheckout = function(id, title, price) {
+        function setupCarousel(images, collectionId, recordId) {
+            currentSlideIndex = 0;
+            currentSlideImages = images.map(img => `${POCKETBASE_URL}/api/files/${collectionId}/${recordId}/${img}`);
+            
+            const coverEl = document.getElementById('detail-cover');
+            const prevBtn = document.getElementById('slider-prev');
+            const nextBtn = document.getElementById('slider-next');
+            const dotsContainer = document.getElementById('slider-dots');
+            const thumbsContainer = document.getElementById('slider-thumbs');
+
+            dotsContainer.innerHTML = '';
+            thumbsContainer.innerHTML = '';
+
+            if (currentSlideImages.length === 0) {
+                coverEl.parentElement.parentElement.classList.add('hidden');
+                return;
+            }
+
+            coverEl.parentElement.parentElement.classList.remove('hidden');
+            updateSlideDisplay();
+
+            if (currentSlideImages.length > 1) {
+                prevBtn.classList.remove('hidden');
+                nextBtn.classList.remove('hidden');
+                dotsContainer.classList.remove('hidden');
+                thumbsContainer.classList.remove('hidden');
+
+                currentSlideImages.forEach((imgUrl, i) => {
+                    const dot = document.createElement('button');
+                    dot.id = `dot-${i}`;
+                    dot.className = `w-2 h-2 rounded-full transition-all ${i === 0 ? 'bg-white w-6' : 'bg-white/50'}`;
+                    dot.onclick = () => setSlide(i);
+                    dotsContainer.appendChild(dot);
+
+                    const thumb = document.createElement('img');
+                    thumb.id = `thumb-${i}`;
+                    thumb.src = imgUrl;
+                    thumb.className = `w-16 h-12 rounded-xl object-cover cursor-pointer transition-all border-2 flex-shrink-0 ${i === 0 ? 'border-indigo-600 scale-105' : 'border-transparent opacity-70 hover:opacity-100'}`;
+                    thumb.onclick = () => setSlide(i);
+                    thumbsContainer.appendChild(thumb);
+                });
+            } else {
+                prevBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+                dotsContainer.classList.add('hidden');
+                thumbsContainer.classList.add('hidden');
+            }
+        }
+
+        function updateSlideDisplay() {
+            const coverEl = document.getElementById('detail-cover');
+            coverEl.style.opacity = 0;
+            setTimeout(() => {
+                coverEl.src = currentSlideImages[currentSlideIndex];
+                coverEl.style.opacity = 1;
+            }, 120);
+
+            currentSlideImages.forEach((_, i) => {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    dot.className = (i === currentSlideIndex) ? 'w-6 h-2 rounded-full bg-white transition-all' : 'w-2 h-2 rounded-full bg-white/50 transition-all';
+                }
+                const thumb = document.getElementById(`thumb-${i}`);
+                if (thumb) {
+                    thumb.className = (i === currentSlideIndex) ? 'w-16 h-12 rounded-xl object-cover cursor-pointer transition-all border-2 border-indigo-600 scale-105 flex-shrink-0' : 'w-16 h-12 rounded-xl object-cover cursor-pointer transition-all border-2 border-transparent opacity-70 hover:opacity-100 flex-shrink-0';
+                }
+            });
+        }
+
+        function nextSlide() {
+            if (currentSlideImages.length <= 1) return;
+            currentSlideIndex = (currentSlideIndex + 1) % currentSlideImages.length;
+            updateSlideDisplay();
+        }
+
+        function prevSlide() {
+            if (currentSlideImages.length <= 1) return;
+            currentSlideIndex = (currentSlideIndex - 1 + currentSlideImages.length) % currentSlideImages.length;
+            updateSlideDisplay();
+        }
+
+        function setSlide(i) {
+            currentSlideIndex = i;
+            updateSlideDisplay();
+        }
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const touchArea = document.getElementById('slider-touch-area');
+        if (touchArea) {
+            touchArea.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+            touchArea.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                if (touchStartX - touchEndX > 40) nextSlide();
+                else if (touchEndX - touchStartX > 40) prevSlide();
+            }, { passive: true });
+        }
+
+        async function openProductDetail(id, pushUrl = true) {
+            const p = allProducts.find(item => item.id === id);
+            if (!p) return;
+            activeProduct = p;
+
+            if (pushUrl && (p.slug || p.id)) {
+                history.pushState({ productId: p.id }, p.title, '?p=' + encodeURIComponent(p.slug || p.id));
+            }
+
+            document.getElementById('detail-title').textContent = p.title;
+            document.getElementById('detail-price').textContent = `${p.price} XAF`;
+            document.getElementById('sticky-price').textContent = `${p.price} XAF`;
+
+            const orig = document.getElementById('detail-original-price');
+            if (Number(p.original_price) > Number(p.price)) {
+                orig.textContent = `${p.original_price} XAF`;
+                orig.classList.remove('hidden');
+            } else { orig.classList.add('hidden'); }
+
+            const catBadge = document.getElementById('detail-category-badge');
+            if (p.category && p.category.trim()) {
+                const catText = p.category.trim();
+                catBadge.innerHTML = `${getCategorySvg(catText, 'w-3 h-3')} <span>${catText}</span>`;
+                catBadge.onclick = () => { setCategoryFilter(catText); };
+                catBadge.style.cursor = 'pointer';
+                catBadge.classList.remove('hidden');
+            } else { catBadge.classList.add('hidden'); }
+
+            let imgs = [];
+            if (p.cover) imgs.push(p.cover);
+            if (Array.isArray(p.gallery)) {
+                p.gallery.forEach(img => { if (!imgs.includes(img)) imgs.push(img); });
+            } else if (typeof p.gallery === 'string' && p.gallery.trim()) {
+                try {
+                    const parsed = JSON.parse(p.gallery);
+                    if (Array.isArray(parsed)) parsed.forEach(img => { if (!imgs.includes(img)) imgs.push(img); });
+                    else if (!imgs.includes(p.gallery)) imgs.push(p.gallery);
+                } catch(e) {
+                    if (!imgs.includes(p.gallery)) imgs.push(p.gallery);
+                }
+            }
+            setupCarousel(imgs, p.collectionId, p.id);
+
+            const badgeLeft = document.getElementById('detail-badge-left');
+            if (p.badge_label && p.badge_label.trim()) {
+                badgeLeft.textContent = p.badge_label;
+                badgeLeft.className = `absolute top-4 left-4 px-3.5 py-1.5 rounded-full text-xs font-black shadow-lg uppercase tracking-wider ${getBadgeClass(p.badge_color)}`;
+                badgeLeft.classList.remove('hidden');
+            } else { badgeLeft.classList.add('hidden'); }
+
+            const badgeRight = document.getElementById('detail-badge-right');
+            if (Number(p.original_price) > Number(p.price)) {
+                const discount = Math.round(((Number(p.original_price) - Number(p.price)) / Number(p.original_price)) * 100);
+                badgeRight.textContent = `-${discount}%`;
+                badgeRight.classList.remove('hidden');
+            } else { badgeRight.classList.add('hidden'); }
+
+            const stickyBtn = document.getElementById('sticky-buy-btn');
+            const stickyBtnText = document.getElementById('sticky-btn-text');
+            const btnText = p.buy_button_text || 'Acheter maintenant';
+            const btnColor = getButtonColor(p.buy_button_color || 'Vert');
+            stickyBtnText.textContent = btnText;
+            stickyBtn.className = `flex-1 sm:flex-initial sm:min-w-[240px] text-white font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-lg transition-transform active:scale-95 text-center flex items-center justify-center gap-2 ${btnColor} ${getAnimationClass(p.button_animation)}`;
+
+            document.getElementById('detail-description').innerHTML = p.description || '<p class="text-gray-400">Aucune description.</p>';
+
+            const faqSec = document.getElementById('detail-faq-section');
+            const faqList = document.getElementById('detail-faq-list');
+            faqList.innerHTML = '';
+            let faqItems = [];
+
+            try {
+                const fRes = await fetch(`${POCKETBASE_URL}/api/collections/faqs/records?filter=product='${p.id}'&sort=sort_order,created`);
+                if (fRes.ok) {
+                    const fData = await fRes.json();
+                    if (fData.items && fData.items.length > 0) {
+                        faqItems = fData.items.map(it => ({ q: it.question, a: it.answer }));
+                    }
+                }
+            } catch(e) {}
+
+            if (faqItems.length > 0) {
+                faqSec.classList.remove('hidden');
+                faqItems.forEach((item, idx) => {
+                    const el = document.createElement('div');
+                    el.className = 'border border-gray-200 rounded-2xl p-4 bg-gray-50/50 transition-all';
+                    el.innerHTML = `
+                        <button onclick="toggleFaq(${idx})" class="w-full flex justify-between items-center text-left font-bold text-sm text-gray-900 group">
+                            <span>${item.q}</span>
+                            <svg id="faq-icon-${idx}" class="w-4 h-4 text-gray-400 transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="faq-ans-${idx}" class="hidden prose prose-sm max-w-none text-gray-700 mt-2.5 pt-2.5 border-t border-gray-200 leading-relaxed">${item.a}</div>
+                    `;
+                    faqList.appendChild(el);
+                });
+            } else { faqSec.classList.add('hidden'); }
+
+            catalogView.classList.add('hidden');
+            detailView.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closeProductDetail(pushUrl = true) {
+            detailView.classList.add('hidden');
+            catalogView.classList.remove('hidden');
+            activeProduct = null;
+            if (pushUrl) history.pushState(null, '', window.location.pathname);
+        }
+
+        window.onpopstate = () => {
+            const urlParam = new URLSearchParams(window.location.search).get('p');
+            if (urlParam) {
+                const found = allProducts.find(p => p.slug === urlParam || p.id === urlParam);
+                if (found) openProductDetail(found.id, false);
+            } else {
+                closeProductDetail(false);
+            }
+        };
+
+        window.toggleFaq = (idx) => {
+            const ans = document.getElementById('faq-ans-' + idx);
+            const ic = document.getElementById('faq-icon-' + idx);
+            ans.classList.toggle('hidden');
+            if (ans.classList.contains('hidden')) {
+                ic.classList.remove('rotate-180');
+            } else {
+                ic.classList.add('rotate-180');
+            }
+        };
+
+        window.buyCurrentProduct = () => { if (activeProduct) openCheckout(activeProduct.id, activeProduct.title, activeProduct.price); };
+
+        function openCheckout(id, title, price) {
             document.getElementById('product_id').value = id;
             document.getElementById('product_price').value = price;
             document.getElementById('product_name_hidden').value = title;
-
             document.getElementById('modal-product-title').textContent = title;
             document.getElementById('modal-price').textContent = price;
-
-            discountedPrice = null;
+            appliedCoupon = null; discountedPrice = null;
             document.getElementById('promo_code').value = '';
             document.getElementById('promo-message').classList.add('hidden');
-
-
             checkoutForm.classList.remove('hidden');
             successMessage.classList.add('hidden');
             modal.classList.add('active');
-        };
+        }
 
-        closeModal.addEventListener('click', () => {
-            modal.classList.remove('active');
-        });
+        closeModal.onclick = () => modal.classList.remove('active');
+        modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 
-        modal.addEventListener('click', (e) => {
-            if(e.target === modal) modal.classList.remove('active');
-        });
-
-
-        let discountedPrice = null;
-
-        document.getElementById('apply-promo-btn').addEventListener('click', async () => {
-            const codeInput = document.getElementById('promo_code');
-            const code = codeInput.value.trim().toUpperCase();
-            const msgEl = document.getElementById('promo-message');
-            const originalPrice = parseFloat(document.getElementById('product_price').value);
-
+        document.getElementById('apply-promo-btn').onclick = async () => {
+            const code = document.getElementById('promo_code').value.trim().toUpperCase();
+            const msg = document.getElementById('promo-message');
+            const orig = parseFloat(document.getElementById('product_price').value);
+            const curId = document.getElementById('product_id').value;
             if (!code) return;
 
             try {
-                const res = await fetch(`${POCKETBASE_URL}/api/collections/coupons/records?filter=(code='${code}' && is_active=true)`);
+                const res = await fetch(`${POCKETBASE_URL}/api/collections/coupons/records?filter=code='${code}'`);
                 const data = await res.json();
-
-                msgEl.classList.remove('hidden');
+                msg.classList.remove('hidden');
 
                 if (data.items && data.items.length > 0) {
-                    const coupon = data.items[0];
-                    // Verify max_uses if you want, but this is a simplified check
-
-                    let discount = 0;
-                    if (coupon.discount_percent) {
-                        discount = originalPrice * (coupon.discount_percent / 100);
-                    } else if (coupon.discount_amount) {
-                        discount = coupon.discount_amount;
+                    const c = data.items[0];
+                    if (c.is_active === false) { msg.textContent = 'Code désactivé.'; msg.className = 'text-xs font-bold mt-1 text-red-600'; return; }
+                    const used = Number(c.used_count || 0);
+                    if (c.max_uses && used >= Number(c.max_uses)) { msg.textContent = `Ce code promo est épuisé (${used}/${c.max_uses}).`; msg.className = 'text-xs font-bold mt-1 text-red-600'; return; }
+                    if (Array.isArray(c.applicable_products) && c.applicable_products.length > 0 && !c.applicable_products.includes(curId)) {
+                        msg.textContent = 'Non valable pour ce produit.'; msg.className = 'text-xs font-bold mt-1 text-red-600'; return;
                     }
+                    let disc = 0;
+                    if (c.discount_percent) disc = orig * (c.discount_percent / 100);
+                    else if (c.discount_amount) disc = Number(c.discount_amount);
+                    discountedPrice = Math.max(0, orig - disc);
+                    appliedCoupon = c;
+                    msg.textContent = `Code appliqué : -${c.discount_percent ? c.discount_percent + '%' : disc + ' XAF'}`;
+                    msg.className = 'text-xs font-bold mt-1 text-green-600';
+                    document.getElementById('modal-price').textContent = discountedPrice;
+                } else { msg.textContent = 'Code promo invalide.'; msg.className = 'text-xs font-bold mt-1 text-red-600'; }
+            } catch (e) { msg.textContent = 'Erreur vérification.'; msg.className = 'text-xs font-bold mt-1 text-red-600'; }
+        };
 
-                    discountedPrice = Math.max(0, originalPrice - discount);
-
-                    msgEl.textContent = `Code appliqué : -${coupon.discount_percent ? coupon.discount_percent + '%' : discount + ' XAF'}`;
-                    msgEl.className = 'text-xs mt-1 text-green-600 font-medium';
-
-                    document.getElementById('modal-price').innerHTML = `
-                        <span class="line-through text-indigo-300 text-sm mr-1">${originalPrice}</span>
-                        ${discountedPrice}
-                    `;
-                } else {
-                    discountedPrice = null;
-                    msgEl.textContent = 'Code promo invalide ou expiré';
-                    msgEl.className = 'text-xs mt-1 text-red-600 font-medium';
-                    document.getElementById('modal-price').textContent = originalPrice;
-                }
-            } catch (err) {
-                console.error(err);
-                discountedPrice = null;
-                msgEl.textContent = 'Erreur de vérification';
-                msgEl.className = 'text-xs mt-1 text-red-600 font-medium';
-                document.getElementById('modal-price').textContent = originalPrice;
-            }
-        });
-
-        // Checkout logic
-        checkoutForm.addEventListener('submit', async (e) => {
+        checkoutForm.onsubmit = async (e) => {
             e.preventDefault();
-
-            const submitBtn = document.getElementById('submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Traitement...';
-
-            const name = document.getElementById('customer_name').value;
-            const email = document.getElementById('customer_email').value;
-            const phone = document.getElementById('customer_phone').value;
-            const productTitle = document.getElementById('product_name_hidden').value;
-            const originalAmount = parseFloat(document.getElementById('product_price').value);
-            const amount = discountedPrice !== null ? discountedPrice : originalAmount;
-
-            // Generate CMD-XXXXXX reference
-            const reference = 'CMD-' + Math.floor(100000 + Math.random() * 900000);
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true; btn.textContent = 'Validation...';
+            const curId = document.getElementById('product_id').value;
+            const ref = 'CMD-' + Math.floor(100000 + Math.random() * 900000);
+            const finalP = discountedPrice !== null ? discountedPrice : parseFloat(document.getElementById('product_price').value);
 
             try {
-                // 1. Save order to PocketBase
-                const orderData = {
-                    customer_name: name,
-                    customer_email: email,
-                    customer_phone: phone,
-                    product_title: productTitle,
-                    amount: amount,
-                    status: 'pending',
-                    reference: reference
-                };
-
                 await fetch(`${POCKETBASE_URL}/api/collections/orders/records`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
+                    body: JSON.stringify({
+                        customer_name: document.getElementById('customer_name').value,
+                        customer_email: document.getElementById('customer_email').value,
+                        customer_phone: document.getElementById('customer_phone').value,
+                        product: curId,
+                        product_title: document.getElementById('product_name_hidden').value,
+                        amount: finalP,
+                        status: 'paid',
+                        reference: ref
+                    })
                 });
 
-                // 2. Show success message briefly
-                checkoutForm.classList.add('hidden');
-                successMessage.classList.remove('hidden');
-                successMessage.classList.add('flex');
-
-                // 3. Init Notch Pay
-                const notchPayData = {
-                    email: email,
-                    amount: amount,
-                    currency: 'XAF',
-                    reference: reference,
-                    callback: `${window.location.origin}/success.html?reference=${reference}`,
-                    description: \`Achat: \${productTitle}\`,
-                    customer: {
-                        name: name,
-                        email: email,
-                        phone: phone
-                    }
-                };
-
-                const paymentRes = await fetch('https://api.notchpay.co/payments', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': \`\${NOTCHPAY_PUBLIC_KEY}\`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(notchPayData)
-                });
-
-                if(paymentRes.ok) {
-                    const paymentData = await paymentRes.json();
-                    if(paymentData.authorization_url) {
-                        setTimeout(() => {
-                            window.location.href = paymentData.authorization_url;
-                        }, 1500);
-                    }
-                } else {
-                    console.error('Notch Pay error', await paymentRes.text());
-                    alert("Erreur lors de l'initialisation du paiement.");
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Confirmer la commande';
-                    checkoutForm.classList.remove('hidden');
-                    successMessage.classList.add('hidden');
-                    successMessage.classList.remove('flex');
+                if (appliedCoupon) {
+                    await fetch(`${POCKETBASE_URL}/api/collections/coupons/records/${appliedCoupon.id}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ used_count: Number(appliedCoupon.used_count || 0) + 1 })
+                    });
                 }
 
-            } catch (error) {
-                console.error(error);
-                alert("Une erreur est survenue.");
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Confirmer la commande';
-            }
+                checkoutForm.classList.add('hidden');
+                successMessage.classList.remove('hidden');
+                setTimeout(() => { window.location.href = `success.html?reference=${ref}&product_id=${curId}`; }, 1000);
+            } catch (err) { alert('Erreur'); btn.disabled = false; }
+        };
+
+        document.querySelectorAll('.filter-btn').forEach(b => {
+            b.onclick = (e) => {
+                const targetCat = e.currentTarget.dataset.category || 'Tous';
+                setCategoryFilter(targetCat);
+            };
         });
 
-        // Init
+        // Initialisation complète
+        fetchHeroBanners();
         fetchProducts();
     </script>
 </body>

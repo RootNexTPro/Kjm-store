@@ -3,184 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paiement Réussi - KJM Store Online</title>
+    <title>Paiement Confirmé - KJM Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-pop-in { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes scale-up { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .animate-scale { animation: scale-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
-
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col justify-between">
     <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <span class="text-2xl font-bold text-indigo-600">KJM Store Online</span>
-                <a href="purchases.html" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors ml-6">Mes Achats 📦</a>
-            </div>
-            <a href="index.html" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors">
-                &larr; Retour à la boutique
+    <header class="bg-white border-b border-gray-100 py-3.5 px-4 sticky top-0 z-30">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-xl font-black text-indigo-600 flex items-center gap-2">
+                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+                <span>KJM Store</span>
+            </a>
+            <a href="index.html" class="text-xs font-bold text-gray-600 hover:text-indigo-600 flex items-center gap-1.5 transition-colors">
+                <span>Retour à la boutique</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
             </a>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden">
-
-            <!-- Success Banner -->
-            <div class="bg-green-50 px-8 py-10 text-center border-b border-green-100">
-                <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6 animate-pop-in">
-                    <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                </div>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Paiement Confirmé avec Succès ! 🎉</h1>
-                <p class="text-gray-600">Merci pour votre confiance. Votre commande a bien été enregistrée.</p>
-            </div>
-
-            <div class="p-8">
-                <!-- Order Summary Skeleton/Container -->
-                <div id="order-loading" class="text-center py-8 text-gray-500">
-                    Chargement des détails de votre commande...
-                </div>
-
-                <div id="order-content" class="hidden">
-                    <div class="bg-gray-50 rounded-xl p-6 mb-8 border border-gray-200">
-                        <h2 class="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Récapitulatif de la commande</h2>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">Référence</span>
-                                <span class="font-semibold text-gray-900" id="summary-ref">-</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">Client</span>
-                                <span class="font-semibold text-gray-900" id="summary-name">-</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500">Produit</span>
-                                <span class="font-semibold text-gray-900" id="summary-product">-</span>
-                            </div>
-                            <div class="flex justify-between pt-3 border-t border-gray-200">
-                                <span class="text-gray-500 font-medium">Total Payé</span>
-                                <span class="font-bold text-indigo-600 text-lg" id="summary-amount">- XAF</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Delivery Section -->
-                    <div class="text-center mb-8">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Votre Produit</h3>
-                        <p class="text-gray-500 mb-6 text-sm">Accédez immédiatement à votre achat ci-dessous.</p>
-
-                        <div id="download-section">
-                            <!-- Download button injected here if file exists -->
-                        </div>
-
-                        <div class="mt-6 bg-yellow-50 text-yellow-800 text-sm text-left p-4 rounded-lg border border-yellow-200 inline-block w-full">
-                            <p class="font-bold mb-1 flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-                                Instructions
-                            </p>
-                            <p>Si votre produit nécessite des identifiants ou une clé de licence, vous les recevrez par e-mail dans les prochaines minutes. Vérifiez vos courriers indésirables (Spams).</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- WhatsApp Support -->
-                <div class="border-t border-gray-200 pt-6 text-center">
-                    <a id="whatsapp-btn" href="https://wa.me/237XXXXXXXXX" target="_blank" class="inline-flex items-center justify-center w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
-                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                        Besoin d'assistance ? Contactez-nous sur WhatsApp
-                    </a>
+    <!-- Conteneur Principal -->
+    <main class="max-w-xl mx-auto px-4 py-8 w-full flex-1">
+        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-8 animate-scale relative">
+            
+            <!-- Vrai Coche Vectoriel SVG Pro (Zéro Emoji) -->
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 bg-green-50 border-2 border-green-200 rounded-full flex items-center justify-center shadow-inner">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
                 </div>
             </div>
+
+            <!-- Titre et sous-titre -->
+            <div class="text-center mb-6">
+                <h1 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Paiement Confirmé avec Succès !</h1>
+                <p class="text-xs sm:text-sm text-gray-500 mt-1">Merci pour votre achat. Votre commande a bien été enregistrée.</p>
+            </div>
+
+            <!-- Récapitulatif de la commande (Style Tableau Pro comme Vidéo 1) -->
+            <div class="bg-gray-50/80 rounded-2xl border border-gray-200/80 p-4 sm:p-5 mb-6">
+                <h2 class="text-xs font-black uppercase tracking-wider text-gray-500 mb-3 flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    <span>Récapitulatif de la commande</span>
+                </h2>
+                <div class="space-y-2.5 text-xs sm:text-sm">
+                    <div class="flex justify-between items-center py-1 border-b border-gray-200/60">
+                        <span class="text-gray-500">Référence</span>
+                        <span id="order-ref" class="font-mono font-bold text-gray-900 bg-white px-2.5 py-0.5 rounded-lg border border-gray-200 text-xs">...</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1 border-b border-gray-200/60">
+                        <span class="text-gray-500">Client</span>
+                        <span id="customer-name" class="font-bold text-gray-900">...</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1 border-b border-gray-200/60">
+                        <span class="text-gray-500">Produit</span>
+                        <span id="product-title" class="font-bold text-gray-900 max-w-[200px] truncate text-right">...</span>
+                    </div>
+                    <div class="flex justify-between items-center py-1 pt-1.5">
+                        <span class="text-gray-700 font-extrabold">Total Payé</span>
+                        <span id="order-amount" class="text-base font-black text-indigo-600">...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carte Visuelle du Produit -->
+            <div id="product-card" class="bg-white rounded-2xl border border-gray-200 p-4 mb-6 shadow-sm flex items-center gap-3.5 hidden">
+                <img id="product-cover" src="" class="w-16 h-16 rounded-xl object-cover bg-gray-100 flex-shrink-0 border border-gray-100">
+                <div class="min-w-0 flex-1">
+                    <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-wider block">Votre Produit</span>
+                    <h3 id="card-product-title" class="text-sm font-black text-gray-900 truncate">...</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Accès immédiat et livraison instantanée</p>
+                </div>
+            </div>
+
+            <!-- Message d'instructions / Identifiants personnalisés -->
+            <div id="delivery-message-box" class="hidden text-left bg-indigo-50/70 border border-indigo-100 rounded-2xl p-4 mb-6 text-xs text-gray-800 leading-relaxed shadow-sm"></div>
+
+            <!-- Boîte d'instructions Jaune / Ambre (Comme dans la Vidéo 1) -->
+            <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-4 mb-6 text-left flex gap-3 items-start">
+                <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <div class="text-xs text-amber-900 leading-relaxed">
+                    <strong class="font-bold block mb-0.5">Instructions importantes</strong>
+                    La confirmation a été enregistrée pour votre compte. Si vous ne recevez pas vos accès immédiatement, cliquez sur le bouton d'assistance WhatsApp ci-dessous avec votre numéro de commande.
+                </div>
+            </div>
+
+            <!-- BOUTONS D'ACTION PRO (DANS L'ORDRE DE LA VIDÉO 1) -->
+            <div class="space-y-3">
+                
+                <!-- 1. BOUTON PRINCIPAL D'ACCÈS / REDIRECTION -->
+                <a id="access-btn" href="#" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 text-sm sm:text-base transition-transform active:scale-95 text-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                    <span id="access-btn-text">Accéder à mon produit</span>
+                </a>
+
+                <!-- 2. COMPTE À REBOURS REDIRECTION AUTOMATIQUE (5S) -->
+                <div id="auto-redirect-note" class="text-center text-xs text-gray-400 font-semibold py-1 hidden flex items-center justify-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Redirection automatique dans <span id="countdown" class="font-bold text-gray-600">5</span>s...</span>
+                </div>
+
+                <!-- 3. BOUTON CONSULTER MES ACHATS -->
+                <a href="purchases.html" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors">
+                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    <span>Consulter mes achats</span>
+                </a>
+
+                <!-- 4. BOUTON ASSISTANCE WHATSAPP AVEC VRAI LOGO VECTORIEL SVG PRO -->
+                <a id="whatsapp-btn" href="#" target="_blank" class="w-full bg-[#25D366] hover:bg-[#20ba59] text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-md shadow-[#25D366]/20 flex items-center justify-center gap-2.5 text-xs sm:text-sm transition-transform active:scale-95 text-center">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.97.545 1.764.819 2.796.82h.005c3.182 0 5.767-2.587 5.768-5.766.001-3.182-2.585-5.77-5.773-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.072-2.029-.481-1.616-.669-2.656-2.316-2.737-2.424-.08-.108-.65-.65-.65-1.647 0-.997.521-1.488.706-1.693.185-.205.405-.257.54-.257.135 0 .27.001.387.007.123.007.288-.047.45.342.162.387.558 1.36.608 1.46.05.101.083.218.016.35-.067.133-.101.216-.201.332-.1.116-.21.26-.3.35-.1.1-.205.21-.088.411.117.201.52.858 1.113 1.11.766.68 1.411.89 1.612.99.201.1.319.083.436-.05.118-.134.505-.589.64-.79.135-.202.27-.168.455-.101.185.067 1.178.556 1.38.657.202.101.337.151.387.236.05.084.05.49-.094.895z"/>
+                    </svg>
+                    <span>Recevoir assistance / Contactez-nous sur WhatsApp</span>
+                </a>
+
+            </div>
+
         </div>
     </main>
 
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-gray-400">
+        &copy; 2026 KJM Store. Tous droits réservés.
+    </footer>
+
     <script>
         const POCKETBASE_URL = window.location.origin;
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get('reference') || 'CMD-000000';
+        const productId = params.get('product_id') || '';
 
-        async function init() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const reference = urlParams.get('reference');
+        // Numéro WhatsApp Support KJM Store (mettre votre numéro si différent)
+        const WHATSAPP_PHONE = "237699000000"; 
 
-            const loadingEl = document.getElementById('order-loading');
-            const contentEl = document.getElementById('order-content');
+        document.getElementById('order-ref').textContent = ref;
 
-            if (!reference) {
-                loadingEl.innerHTML = '<span class="text-red-500">Référence de commande manquante.</span>';
-                return;
-            }
+        async function loadOrderAndProduct() {
+            let orderCustomerName = 'Client';
+            let orderAmount = '';
+            let productTitle = 'Produit';
 
-            // Update WhatsApp link with reference
-            const waBtn = document.getElementById('whatsapp-btn');
-            // Assuming the support number is 237000000000, modify as needed
-            const supportNumber = '237000000000';
-            const message = encodeURIComponent(`Bonjour, j'ai besoin d'assistance concernant ma commande ${reference}.`);
-            waBtn.href = `https://wa.me/${supportNumber}?text=${message}`;
-
+            // 1. Charger les infos de la commande
             try {
-                // Fetch order by reference
-                const res = await fetch(`${POCKETBASE_URL}/api/collections/orders/records?filter=(reference='${reference}')`);
-                const data = await res.json();
-
-                if (data.items && data.items.length > 0) {
-                    const order = data.items[0];
-
-                    document.getElementById('summary-ref').textContent = order.reference;
-                    document.getElementById('summary-name').textContent = order.customer_name;
-                    document.getElementById('summary-product').textContent = order.product_title;
-                    document.getElementById('summary-amount').textContent = order.amount;
-
-                    // Note: Pocketbase doesn't link order to product directly in our schema (only string product_title).
-                    // To fetch the file, we need to query the product by title.
-                    const productRes = await fetch(`${POCKETBASE_URL}/api/collections/products/records?filter=(title='${order.product_title.replace(/'/g, "\\'")}')`);
-                    const productData = await productRes.json();
-
-                    const downloadSection = document.getElementById('download-section');
-
-                    if (productData.items && productData.items.length > 0) {
-                        const product = productData.items[0];
-                        if (product.file && order.status === 'paid') {
-                            const fileUrl = `${POCKETBASE_URL}/api/files/${product.collectionId}/${product.id}/${product.file}`;
-                            downloadSection.innerHTML = `
-                                <a href="${fileUrl}" target="_blank" class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 w-full sm:w-auto">
-                                    <svg class="w-6 h-6 mr-2 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                    Télécharger mon produit maintenant
-                                </a>
-                            `;
-                        } else if (order.status !== 'paid') {
-                            downloadSection.innerHTML = `
-                                <div class="bg-gray-100 p-4 rounded-lg text-gray-600">
-                                    Le paiement est en attente de confirmation. Rechargez la page dans quelques instants.
-                                </div>
-                            `;
-                        }
-                    } else {
-                        downloadSection.innerHTML = `
-                            <div class="bg-gray-100 p-4 rounded-lg text-gray-600">
-                                Le fichier numérique sera envoyé par email.
-                            </div>
-                        `;
+                const orderRes = await fetch(`${POCKETBASE_URL}/api/collections/orders/records?filter=reference='${ref}'`);
+                if (orderRes.ok) {
+                    const orderData = await orderRes.json();
+                    if (orderData.items && orderData.items.length > 0) {
+                        const o = orderData.items[0];
+                        orderCustomerName = o.customer_name || 'Client';
+                        orderAmount = (o.amount !== undefined ? o.amount : '') + ' XAF';
+                        if (o.product_title) productTitle = o.product_title;
                     }
-
-                    loadingEl.style.display = 'none';
-                    contentEl.classList.remove('hidden');
-                } else {
-                    loadingEl.innerHTML = '<span class="text-red-500">Commande introuvable.</span>';
                 }
-            } catch (err) {
-                console.error(err);
-                loadingEl.innerHTML = '<span class="text-red-500">Erreur lors de la récupération de la commande.</span>';
+            } catch (e) {}
+
+            document.getElementById('customer-name').textContent = orderCustomerName;
+            document.getElementById('order-amount').textContent = orderAmount || 'Payé';
+
+            // 2. Bouton WhatsApp avec message pré-rempli
+            const waMsg = encodeURIComponent(`Bonjour KJM Store, j'ai validé ma commande ${ref} pour "${productTitle}". Pouvez-vous m'assister svp ?`);
+            document.getElementById('whatsapp-btn').href = `https://wa.me/${WHATSAPP_PHONE}?text=${waMsg}`;
+
+            // 3. Charger le produit pour le bouton d'accès et le visuel
+            if (productId) {
+                try {
+                    const prodRes = await fetch(`${POCKETBASE_URL}/api/collections/products/records/${productId}`);
+                    if (prodRes.ok) {
+                        const p = await prodRes.json();
+                        productTitle = p.title || productTitle;
+                        document.getElementById('product-title').textContent = productTitle;
+                        document.getElementById('card-product-title').textContent = productTitle;
+
+                        if (p.cover) {
+                            document.getElementById('product-cover').src = `${POCKETBASE_URL}/api/files/${p.collectionId}/${p.id}/${p.cover}`;
+                        }
+                        document.getElementById('product-card').classList.remove('hidden');
+
+                        if (p.delivery_message && p.delivery_message.trim()) {
+                            const msgBox = document.getElementById('delivery-message-box');
+                            msgBox.innerHTML = p.delivery_message;
+                            msgBox.classList.remove('hidden');
+                        }
+
+                        // Bouton d'accès : texte choisi par vous ou par défaut
+                        const accessBtn = document.getElementById('access-btn');
+                        const accessText = document.getElementById('access-btn-text');
+                        accessText.textContent = p.success_button_text || 'Accéder à mon produit';
+
+                        const targetUrl = p.delivery_link || p.redirect_url || 'purchases.html';
+                        accessBtn.href = targetUrl;
+
+                        // Redirection automatique 5s si un lien externe est configuré
+                        if (p.delivery_link && p.delivery_link.startsWith('http')) {
+                            const note = document.getElementById('auto-redirect-note');
+                            const countEl = document.getElementById('countdown');
+                            note.classList.remove('hidden');
+                            let secs = 5;
+                            const timer = setInterval(() => {
+                                secs--;
+                                if (countEl) countEl.textContent = secs;
+                                if (secs <= 0) {
+                                    clearInterval(timer);
+                                    window.location.href = p.delivery_link;
+                                }
+                            }, 1000);
+                        }
+                    }
+                } catch (e) {}
+            } else {
+                document.getElementById('product-title').textContent = productTitle;
             }
         }
 
-        document.addEventListener('DOMContentLoaded', init);
+        loadOrderAndProduct();
     </script>
 </body>
 </html>
