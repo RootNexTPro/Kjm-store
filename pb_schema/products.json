@@ -1,13 +1,19 @@
 {
+  "id": "vyng2ut0t8u6jto",
+  "created": "2026-09-27 16:22:13.102Z",
+  "updated": "2026-09-27 16:22:13.102Z",
   "name": "products",
   "type": "base",
   "system": false,
   "schema": [
     {
+      "system": false,
+      "id": "evjkveby",
       "name": "title",
       "type": "text",
-      "system": false,
       "required": true,
+      "presentable": false,
+      "unique": false,
       "options": {
         "min": null,
         "max": null,
@@ -15,10 +21,13 @@
       }
     },
     {
+      "system": false,
+      "id": "wkpbdpr1",
       "name": "slug",
       "type": "text",
-      "system": false,
       "required": true,
+      "presentable": false,
+      "unique": false,
       "options": {
         "min": null,
         "max": null,
@@ -26,59 +35,91 @@
       }
     },
     {
+      "system": false,
+      "id": "vzco8ett",
       "name": "price",
       "type": "number",
-      "system": false,
       "required": true,
+      "presentable": false,
+      "unique": false,
       "options": {
         "min": null,
-        "max": null
+        "max": null,
+        "noDecimal": false
       }
     },
     {
+      "system": false,
+      "id": "mxb2gpzn",
       "name": "original_price",
       "type": "number",
-      "system": false,
       "required": false,
+      "presentable": false,
+      "unique": false,
       "options": {
         "min": null,
-        "max": null
+        "max": null,
+        "noDecimal": false
       }
     },
     {
+      "system": false,
+      "id": "kvdsokby",
       "name": "description",
       "type": "editor",
-      "system": false,
       "required": false,
-      "options": {}
+      "presentable": false,
+      "unique": false,
+      "options": {
+        "convertUrls": false
+      }
     },
     {
+      "system": false,
+      "id": "q0oejt2h",
       "name": "cover",
       "type": "file",
-      "system": false,
       "required": false,
+      "presentable": false,
+      "unique": false,
       "options": {
+        "mimeTypes": [
+          "image/jpeg",
+          "image/png",
+          "image/svg+xml",
+          "image/gif",
+          "image/webp"
+        ],
+        "thumbs": null,
         "maxSelect": 1,
         "maxSize": 5242880,
-        "mimeTypes": ["image/jpeg", "image/png", "image/svg+xml", "image/gif", "image/webp"]
+        "protected": false
       }
     },
     {
+      "system": false,
+      "id": "xm2r9a92",
       "name": "file",
       "type": "file",
-      "system": false,
-      "required": true,
+      "required": false,
+      "presentable": false,
+      "unique": false,
       "options": {
+        "mimeTypes": [],
+        "thumbs": null,
         "maxSelect": 1,
         "maxSize": 524288000,
-        "mimeTypes": []
+        "protected": false
       }
     },
     {
+      "system": false,
+      "id": "g9kshr7f",
       "name": "category",
       "type": "text",
-      "system": false,
       "required": false,
+      "presentable": false,
+      "unique": false,
       "options": {
         "min": null,
         "max": null,
@@ -86,11 +127,46 @@
       }
     },
     {
+      "system": false,
+      "id": "ynyd0siv",
       "name": "is_active",
       "type": "bool",
-      "system": false,
       "required": false,
+      "presentable": false,
+      "unique": false,
       "options": {}
+    },
+    {
+      "system": false,
+      "name": "redirect_url",
+      "type": "url",
+      "required": false,
+      "presentable": false,
+      "unique": false,
+      "options": {
+        "exceptDomains": null,
+        "onlyDomains": null
+      }
+    },
+    {
+      "system": false,
+      "name": "redirect_button_text",
+      "type": "text",
+      "required": false,
+      "presentable": false,
+      "unique": false,
+      "options": {
+        "min": null,
+        "max": null,
+        "pattern": ""
+      }
     }
-  ]
+  ],
+  "indexes": [],
+  "listRule": null,
+  "viewRule": null,
+  "createRule": null,
+  "updateRule": null,
+  "deleteRule": null,
+  "options": {}
 }
